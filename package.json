@@ -1,0 +1,23 @@
+{
+  "name": "app-task-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resetdesigns/app-task-nodejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/resetdesigns/app-task-nodejs/issues"
+  },
+  "homepage": "https://github.com/resetdesigns/app-task-nodejs#readme",
+  "dependencies": {
+    "mongodb": "^3.1.10"
+  }
+}
