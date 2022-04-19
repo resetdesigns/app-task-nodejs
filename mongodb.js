@@ -21,40 +21,38 @@ MongoClient.connect(
 
         const db = client.db(databaseName);
 
-        // db.collection('users').findOne({ name: 'Kim' }, (error, user) => {
-        //     if (error) {
-        //         return console.log('Unable to fetch user');
-        //     }
-
-        //     console.log(user);
-        // });
-
-        // db.collection('users')
-        //     .find({ age: 33 })
-        //     .toArray((error, users) => {
-        //         console.log(users);
+        // db.collection('tasks')
+        //     .updateMany(
+        //         { completed: false },
+        //         {
+        //             $set: {
+        //                 completed: true,
+        //             },
+        //         }
+        //     )
+        //     .then((result) => {
+        //         console.log(result.modifiedCount);
+        //     })
+        //     .catch((error) => {
+        //         console.log('Error:', error);
         //     });
 
-        // db.collection('users')
-        //     .find({ age: 33 })
-        //     .count((error, count) => {
-        //         console.log(count);
-        //     });
-
-        db.collection('tasks').findOne({ _id: new ObjectID('625ef1fac192ce2ae0de7530') }, (error, task) => {
-            if (error) {
-                return console.log('Unable to fetch task!');
-            }
-            console.log(task);
-        });
+        db.collection('users')
+            .deleteMany({ age: 34 })
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
         db.collection('tasks')
-            .find({ completed: false })
-            .toArray((error, tasks) => {
-                if (error) {
-                    return console.log('Unable to find task');
-                }
-                console.log(tasks);
+            .deleteOne({ description: 'Validate tasks inserted into collection' })
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((error) => {
+                console.log(error);
             });
     }
 );
