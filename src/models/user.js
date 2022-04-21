@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs/dist/bcrypt');
 
-const User = mongoose.model('User', {
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -39,5 +40,24 @@ const User = mongoose.model('User', {
         },
     },
 });
+
+// userSchema.statics.findByCredentials;
+
+// Hash the plain text password before saving
+userSchema.pre('save', async function (next) {
+    // we are using a standard function so this is scoped properly
+    // equal to document being saved
+    const user = this;
+
+    // this will be true if creating a user for the first time or if password is one of the updated properties
+    if (user.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, 8);
+    }
+
+    // tell the function is done executing
+    next();
+});
+
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
