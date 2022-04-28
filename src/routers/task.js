@@ -17,12 +17,35 @@ router.post('/tasks', auth, async (req, res) => {
     }
 });
 
+/*
+ * 	OPTIONS
+ * 	GET /tasks?completed=true
+ * 	GET /tasks?limit=10&skip=10
+ * 	GET /tasks?sortBy=createdAt:desc
+ */
 router.get('/tasks', auth, async (req, res) => {
+    const match = {};
+    const sort = {};
+
+    if (req.query.completed) {
+        match.completed = req.query.completed === 'true';
+    }
+
+    if (req.query.sortBy) {
+        const parts = req.query.sortBy.split(':');
+        sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
+    }
+
     try {
-        // options one :: we can query for tasks by owner id
-        // const tasks = await Task.find({ owner: req.user._id });
-        // option two :: we can use the relationship
-        await req.user.populate('tasks');
+        await req.user.populate({
+            path: 'tasks',
+            match, // use object shorthand since the property and value have the same name
+            options: {
+                limit: parseInt(req.query.limit),
+                skip: parseInt(req.query.skip),
+                sort, // use object shorthand since the property and value have the same name
+            },
+        });
         res.send(req.user.tasks);
     } catch (error) {
         res.status(500).send();
