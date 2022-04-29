@@ -3,6 +3,7 @@ const User = require('../models/user');
 const auth = require('../middleware/auth');
 const multer = require('multer');
 const sharp = require('sharp');
+const { sendWelcomeEmail, sendCancelationEmail } = require('../emails/account.js');
 const router = new express.Router();
 
 router.post('/users', async (req, res) => {
@@ -10,6 +11,7 @@ router.post('/users', async (req, res) => {
 
     try {
         await user.save();
+        sendWelcomeEmail(user.email, user.name);
         const token = await user.generateAuthToken();
         res.status(201).send({ user, token });
     } catch (error) {
@@ -92,6 +94,7 @@ router.delete('/users/me', auth, async (req, res) => {
 
         // we can use built in mongoose to remove the user
         await req.user.remove();
+        sendCancelationEmail(req.user.email, req.user.name);
         res.send(req.user);
     } catch (error) {
         res.status(500).send();
