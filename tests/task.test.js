@@ -154,3 +154,11 @@ test('Should delete user task', async () => {
 	const task = await Task.findById(taskOne._id);
 	expect(task).toBeNull();
 });
+
+test('Should upload task image', async () => {
+	await request(app)
+		.post(`/tasks/${taskOne._id}/image`)
+		.set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+		.attach('image', 'tests/fixtures/profile-pic.jpg')
+		.expect(200);
+});
